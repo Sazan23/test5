@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,4 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/list', function () {
-    return view('file_list');
-});
+Route::get('/list', [MainController::class, 'list']);
