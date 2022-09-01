@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Files;
 
 class MainController extends Controller
 {
@@ -14,6 +15,7 @@ class MainController extends Controller
      */
     public function list()
     {
-        return view('file_list');
+        $files = new Files();
+        return view('file_list', ['files'=>$files->all()]);
     }
 }
