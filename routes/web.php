@@ -19,3 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('/list', [MainController::class, 'list']);
+Route::get('/list/{id}', [MainController::class, 'records']);
