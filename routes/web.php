@@ -26,3 +26,7 @@ Route::post('/upload', [UploadController::class, 'upload']);
 Route::get('/xdebug', function () {
     return view('xdebug');
 });
+
+Route::get('/dp', function () {
+    return view('dp');
+});
