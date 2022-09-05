@@ -17,6 +17,7 @@ class CreateFilesTable extends Migration
             $table->increments('file_id');
             $table->string('file_name');
             $table->string('file_hash');
+            $table->string('file_description')->nullable();
             $table->timestamps();
         });
     }

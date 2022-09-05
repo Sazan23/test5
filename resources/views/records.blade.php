@@ -8,6 +8,19 @@
   <div class="p-3 pb-md-4 mx-auto text-center">
     <h1 class="display-4 fw-normal">Записи</h1>
   </div>
+  <form>
+    <fieldset disabled>
+      <div class="mb-3">
+        <label for="file_name" class="form-label">Имя файла</label>
+        <input type="text" class="form-control" id="file_name" placeholder="{{ $file->file_name }}">
+      </div>
+    </fieldset>
+    <div class="mb-3">
+      <label for="file_description" class="form-label">Описание</label>
+      <input type="text" class="form-control" id="file_description" placeholder="{{ $file->file_descriprion }}">
+    </div>
+    <button type="submit" class="btn btn-primary">Сформировать сводный отчёт</button>
+  </form>
   <table class="table">
     <thead>
       <tr>

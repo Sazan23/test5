@@ -17,13 +17,13 @@ class CreateRecordsTable extends Migration
             $table->increments('record_id');
             $table->integer('file_id')->unsigned();
             $table->string('record_name');
-            $table->string('record_phone');
-            $table->string('record_email');
-            $table->string('record_date');
-            $table->string('record_company');
-            $table->string('record_city');
-            $table->string('record_region');
-            $table->string('record_guid');
+            $table->string('record_phone')->nullable();
+            $table->string('record_email')->nullable();
+            $table->date('record_date')->nullable();
+            $table->string('record_company')->nullable();
+            $table->string('record_city')->nullable();
+            $table->string('record_region')->nullable();
+            $table->string('record_guid')->nullable();
             $table->timestamps();
         });
 

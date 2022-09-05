@@ -53,7 +53,7 @@ class UploadController extends Controller
                     $record->record_name = $row[0];
                     $record->record_phone = $row[1];
                     $record->record_email = $row[2];
-                    $record->record_date = date('d.m.Y', strtotime($row[3]));
+                    $record->record_date = date('Y-m-d', strtotime($row[3]));
                     $record->record_company = $row[4];
                     $record->record_city  = $row[5];
                     $record->record_region = $row[6];
