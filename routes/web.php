@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\UploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,12 @@ use App\Http\Controllers\MainController;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
-Route::get('/list', [MainController::class, 'list']);
+Route::get('/list', [MainController::class, 'list'])->name('list');
 Route::get('/list/{id}', [MainController::class, 'records']);
+Route::post('/upload', [UploadController::class, 'upload']);
+
+Route::get('/xdebug', function () {
+    return view('xdebug');
+});

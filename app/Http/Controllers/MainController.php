@@ -25,9 +25,9 @@ class MainController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function records()
+    public function records(Request $request, $id)
     {
-        $records = new Records();
-        return view('records', ['records'=>$records->all()]);
+        $records = Records::where('file_id', $id)->get();
+        return view('records', ['records'=>$records]);
     }
 }

@@ -8,6 +8,7 @@
   <div class="p-3 pb-md-4 mx-auto text-center">
     <h1 class="display-4 fw-normal">Главная</h1>
     <form enctype="multipart/form-data" action="/upload" method="POST">
+      @csrf
       <div class="mb-3">
         <label for="formFile" class="form-label">Загрузить файл Excel: </label>
         <input type="hidden" name="MAX_FILE_SIZE" value="50000" />
