@@ -23,7 +23,8 @@
       </div>
     </div>
   </form>
-  <script type="text/javascript">
+  
+  <script>
     $('#datepicker input').val('05.12.2013');
     $(function() {
       $('#datepicker input').datepicker({
