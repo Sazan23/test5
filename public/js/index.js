@@ -1,6 +1,4 @@
 
-console.log('it file index.js');
-
 $.ajaxSetup({
     type: 'POST',
     cache: false,
@@ -10,3 +8,10 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+
+function ajaxError(jqxhr, status, errorMsg) {
+    console.log("AJAX error:")
+    console.log(jqxhr)
+    console.log(status)
+    console.log(errorMsg)
+}

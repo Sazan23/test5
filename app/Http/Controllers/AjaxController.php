@@ -8,11 +8,11 @@ use App\Models\Records;
 class AjaxController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Saving an edited entry.
      *
      * @return void
      */
-    public function itemSave(Request $request)
+    public function updateItem(Request $request)
     {
         $input = $request->all();
         $record = Records::find($input['record_id']);
@@ -26,5 +26,18 @@ class AjaxController extends Controller
         $record->save();
         
         return response()->json(['success'=>'Запись сохранена']);
+    }
+
+    /**
+     * Deleting one entry.
+     *
+     * @return void
+     */
+    public function deleteItem(Request $request)
+    {
+        $input = $request->all();
+        Records::where('id', $input['record_id'])->delete();
+
+        return response()->json(['success'=>'Запись удалена','id'=>$input['record_id']]);
     }
 }

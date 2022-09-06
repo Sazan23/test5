@@ -23,7 +23,8 @@ Route::get('/', function () {
 Route::get('/list', [MainController::class, 'list'])->name('list');
 Route::get('/list/{id}', [MainController::class, 'records']);
 Route::post('/upload', [UploadController::class, 'upload']);
-Route::post('/ajax', [AjaxController::class, 'itemSave'])->name('itemSave');
+Route::post('/update', [AjaxController::class, 'updateItem'])->name('itemSave');
+Route::post('/delete', [AjaxController::class, 'deleteItem'])->name('itemDelete');
 
 Route::get('/xdebug', function () {
     return view('xdebug');

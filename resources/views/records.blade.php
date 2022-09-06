@@ -48,8 +48,8 @@
             <td>{{ $record->record_region }}</td>
             <td>{{ $record->record_guid }}</td>
             <td>
-              <button data-id="{{ $record->id }}" type="button" class="btn btn-primary btn-sm" disabled>Сохранить</button>
-              <button type="button" class="btn btn-danger btn-sm">Удалить</button>
+              <button data-update="{{ $record->id }}" type="button" class="btn btn-primary btn-sm btn_update" disabled>Сохранить</button>
+              <button data-delete="{{ $record->id }}" type="button" class="btn btn-danger btn-sm btn_delete">Удалить</button>
             </td>
           </tr>
         @endforeach
@@ -104,13 +104,12 @@
         });
       });
 
-      $('button.btn.btn-primary').on('click', function(e) {
+      $('button.btn.btn_update').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         e.target.disabled = true;
         block = false;
-        let id = $(event.target).data('id');
-        console.log(id);
+        let id = $(event.target).data('update');
         $(`#${id}`).children().each(function(index, el) {
           if (index === 7 || index === 8) {
             return true;
@@ -140,21 +139,40 @@
         $.ajax({
           url: "{{ route('itemSave') }}",
           data: data,
-          success: successItemSave,
+          success: successItemUpdate,
           error: ajaxError
         })
       });
 
-      function successItemSave(data) {
+      $('button.btn.btn_delete').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (confirm("Вы действительно хотите удалить эту запись?")) {
+          e.target.disabled = true;
+          let data = {
+            _token: "{{ csrf_token() }}",
+            record_id: $(event.target).data('delete')
+          };
+
+          $.ajax({
+            url: "{{ route('itemDelete') }}",
+            data: data,
+            success: successItemDelete,
+            error: ajaxError
+          })
+        }
+      });
+
+      function successItemUpdate(data) {
         alert(data.success);
       }
 
-      function ajaxError(jqxhr, status, errorMsg) {
-        console.log("AJAX error:")
-        console.log(jqxhr)
-        console.log(status)
-        console.log(errorMsg)
+      function successItemDelete(data) {
+        $(`#${data.id}`).remove();
+        alert(data.success);
       }
+
     });
   </script>
 @endsection
