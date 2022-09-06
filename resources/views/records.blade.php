@@ -21,7 +21,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Сформировать сводный отчёт</button>
   </form>
-  <div class="card" style="width: 1800px;">
+  <div class="card" style="width: 1900px;">
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -47,7 +47,10 @@
             <td>{{ $record->record_city  }}</td>
             <td>{{ $record->record_region }}</td>
             <td>{{ $record->record_guid }}</td>
-            <td></td>
+            <td>
+              <button data-id="{{ $record->record_id }}" type="button" class="btn btn-primary btn-sm" disabled>Сохранить</button>
+              <button type="button" class="btn btn-danger btn-sm">Удалить</button>
+            </td>
           </tr>
         @endforeach
       </tbody>
@@ -55,44 +58,72 @@
   </div>
 
   <script>
-    let records = [];
-    @foreach( $records as $record )
-      records.push(  {!! $record->toJson() !!} );
-    @endforeach
-    console.log(records);
-    $('#file_name').val('{{ $file->file_name }}');
-    $('#file_description').val('{{ $file->file_name }}');
-    let block = false;
-    $('tr').on('click', function(e){
-      e.stopPropagation();
-      if (block) return;
-      block = true;
-      $(this).children().each(function(index, el) {
-        let text = $(this).html();
-        $(this).html('');
+    $( document ).ready(function() {
+      let records = [];
+      @foreach( $records as $record )
+        records.push(  {!! $record->toJson() !!} );
+      @endforeach
+      console.log(records);
+      $('#file_name').val('{{ $file->file_name }}');
+      $('#file_description').val('{{ $file->file_name }}');
+      let editable_string = [];
+      let block = false;
 
-        if (index === 3) {
-          let datepicker = $(`<div class="input-group date" id="datepicker">
-                                <input type="text" class="form-control form-control-sm">
-                              </div>`);
-          $(this).append(datepicker);
-          datepicker.children().val(text);
-          $(function() {
-            $('#datepicker input').datepicker({
-              format: "dd.mm.yyyy",
-              language: "ru"
+      $('tr').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (block) return;
+        block = true;
+        $(this).children().each(function(index, el) {
+          
+          if (index === 7) {
+            return true;
+          };
+          
+          if (index === 8) {
+            $(this).children().removeAttr('disabled');
+            return true;
+          };
+
+          editable_string[index] = $(this).html();
+          $(this).html('');
+
+          if (index === 3) {
+            let datepicker = $(`<div class="input-group date" id="datepicker">
+                                  <input type="text" class="form-control form-control-sm">
+                                </div>`);
+            $(this).append(datepicker);
+            datepicker.children().val(editable_string[index]);
+            $(function() {
+              $('#datepicker input').datepicker({
+                format: "dd.mm.yyyy",
+                language: "ru"
+              });
             });
-          });
-          return true;
-        }
+            return true;
+          }
 
-        if (index === 8) {
-          return true;
-        };
+          let input = $(`<input class="form-control form-control-sm" type="text">`);
+          $(this).append(input);
+          input.val(editable_string[index]);
+        });
+      });
 
-        let input = $(`<input class="form-control form-control-sm" type="text">`);
-        $(this).append(input);
-        input.val(text);
+      $('button.btn.btn-primary').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.target.disabled = true;
+        block = false;
+        let id = $(event.target).data('id');
+        $(`#${id}`).children().each(function(index, el) {
+          if (index === 7 || index === 8) {
+            return true;
+          };
+          editable_string[index] =  $(this).find('input').val();
+          console.log(index, editable_string[index]);
+          $(this).empty(); 
+          $(this).html(editable_string[index]);
+        });
       });
     });
   </script>
