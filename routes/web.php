@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\AjaxController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::get('/', function () {
 Route::get('/list', [MainController::class, 'list'])->name('list');
 Route::get('/list/{id}', [MainController::class, 'records']);
 Route::post('/upload', [UploadController::class, 'upload']);
+Route::post('/ajax', [AjaxController::class, 'itemSave'])->name('itemSave');
 
 Route::get('/xdebug', function () {
     return view('xdebug');

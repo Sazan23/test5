@@ -27,7 +27,7 @@ class MainController extends Controller
      */
     public function records(Request $request, $id)
     {
-        $file = Files::where(['file_id'=>$id])->get();;
+        $file = Files::where(['id'=>$id])->get();;
         $records = Records::where('file_id', $id)->get();
         return view('records', ['records'=>$records, 'file'=>$file[0]] );
     }

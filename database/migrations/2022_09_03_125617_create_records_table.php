@@ -14,7 +14,7 @@ class CreateRecordsTable extends Migration
     public function up()
     {
         Schema::create('records', function (Blueprint $table) {
-            $table->increments('record_id');
+            $table->increments('id');
             $table->integer('file_id')->unsigned();
             $table->string('record_name');
             $table->string('record_phone')->nullable();
@@ -28,7 +28,7 @@ class CreateRecordsTable extends Migration
         });
 
         Schema::table('records', function(Blueprint $table) {
-            $table->foreign('file_id')->references('file_id')->on('files')
+            $table->foreign('file_id')->references('id')->on('files')
                         ->onDelete('restrict')
                         ->onUpdate('restrict');
         });

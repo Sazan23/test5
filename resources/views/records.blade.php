@@ -38,7 +38,7 @@
       </thead>
       <tbody>
         @foreach( $records as $record )
-          <tr id="{{ $record->record_id }}">
+          <tr id="{{ $record->id }}">
             <td>{{ $record->record_name }}</td>
             <td>{{ $record->record_phone  }}</td>
             <td>{{ $record->record_email }}</td>
@@ -48,7 +48,7 @@
             <td>{{ $record->record_region }}</td>
             <td>{{ $record->record_guid }}</td>
             <td>
-              <button data-id="{{ $record->record_id }}" type="button" class="btn btn-primary btn-sm" disabled>Сохранить</button>
+              <button data-id="{{ $record->id }}" type="button" class="btn btn-primary btn-sm" disabled>Сохранить</button>
               <button type="button" class="btn btn-danger btn-sm">Удалить</button>
             </td>
           </tr>
@@ -59,11 +59,6 @@
 
   <script>
     $( document ).ready(function() {
-      let records = [];
-      @foreach( $records as $record )
-        records.push(  {!! $record->toJson() !!} );
-      @endforeach
-      console.log(records);
       $('#file_name').val('{{ $file->file_name }}');
       $('#file_description').val('{{ $file->file_name }}');
       let editable_string = [];
@@ -115,16 +110,51 @@
         e.target.disabled = true;
         block = false;
         let id = $(event.target).data('id');
+        console.log(id);
         $(`#${id}`).children().each(function(index, el) {
           if (index === 7 || index === 8) {
             return true;
           };
           editable_string[index] =  $(this).find('input').val();
-          console.log(index, editable_string[index]);
           $(this).empty(); 
           $(this).html(editable_string[index]);
         });
+
+        let map = {
+          0: 'record_name',
+          1: 'record_phone',
+          2: 'record_email',
+          3: 'record_date',
+          4: 'record_company',
+          5: 'record_city',
+          6: 'record_region',
+          7: 'record_guid',
+        }
+        let data = {};
+        editable_string.forEach(function(item, i) {
+          data[map[i]] = item;
+        });
+        data._token = "{{ csrf_token() }}";
+        data.record_id = id;
+
+        $.ajax({
+          url: "{{ route('itemSave') }}",
+          data: data,
+          success: successItemSave,
+          error: ajaxError
+        })
       });
+
+      function successItemSave(data) {
+        alert(data.success);
+      }
+
+      function ajaxError(jqxhr, status, errorMsg) {
+        console.log("AJAX error:")
+        console.log(jqxhr)
+        console.log(status)
+        console.log(errorMsg)
+      }
     });
   </script>
 @endsection

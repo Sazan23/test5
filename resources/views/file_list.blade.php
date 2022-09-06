@@ -20,7 +20,7 @@
     <tbody>
       @foreach( $files as $file )
         <tr>
-          <td><a href="/list/{{ $file->file_id }}">{{ $file->file_id }}</a></td>
+          <td><a href="/list/{{ $file->id }}">{{ $file->id }}</a></td>
           <td>{{ $file->file_name  }}</td>
           <td>{{ $file->updated_at }}</td>
           <td>{{ $file->created_at }}</td>
