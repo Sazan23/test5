@@ -19,7 +19,7 @@
       <label for="file_description" class="form-label">Описание</label>
       <input type="text" class="form-control" id="file_description">
     </div>
-    <button type="submit" class="btn btn-primary">Сформировать сводный отчёт</button>
+    <button type="button" class="btn btn-primary btn_download">Сформировать сводный отчёт</button>
   </form>
   <div class="card" style="width: 1900px;">
     <table class="table table-bordered">
@@ -162,6 +162,10 @@
             error: ajaxError
           })
         }
+      });
+
+      $('button.btn.btn_download').on('click', function(e) {
+        window.open('/download/{{ $file->id }}', '_blank');
       });
 
       function successItemUpdate(data) {
