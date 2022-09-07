@@ -3,31 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Files;
 use App\Models\Records;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_STYLE_ALIGNMENT;
 use PHPExcel_STYLE_FILL;
-use PHPExcel_Style_Border;
+use PHPExcel_Style_NumberFormat;
 
 class DownloadController extends Controller
 {
     /**
-     * 
+     * Download summary report
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function download(Request $request, $id)
     {
-        $file = Files::where(['id'=>$id])->get();;
+        $file = Files::find($id);
         $records = Records::where('file_id', $id)->get();
+        $name_count = DB::table('records')->where('file_id', $id)->count('record_name');
+        $city_count = DB::table('records')->where('file_id', $id)->count('record_city');
+        $region_count = DB::table('records')->where('file_id', $id)->count('record_region');
 
         $objPHPExcel = new PHPExcel();
 
-        $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
-                    ->setLastModifiedBy("Maarten Balliauw")
+        $objPHPExcel->getProperties()->setCreator("Oleg Denisenko")
+                    ->setLastModifiedBy("Oleg Denisenko")
                     ->setTitle("Office 2007 XLSX Test Document")
                     ->setSubject("Office 2007 XLSX Test Document")
                     ->setDescription("Test document for Office 2007 XLSX")
@@ -37,22 +41,23 @@ class DownloadController extends Controller
         $objPHPExcel->setActiveSheetIndex(0);
         $activeSheet = $objPHPExcel->getActiveSheet();
 
+        $activeSheet->getColumnDimension('A')->setWidth(80);
+        $activeSheet->getColumnDimension('B')->setWidth(10);
+        $activeSheet->getColumnDimension('C')->setWidth(10);
+        $activeSheet->getColumnDimension('D')->setWidth(10);
 
         $activeSheet->mergeCells('A2:D2');
-        $activeSheet->setCellValue('A2','Сводный отчёт по загруженному файлу');
+        $activeSheet->setCellValue('A2', 'Сводный отчёт по загруженному файлу ' . $file->file_name);
         $style_header = [
-            //шрифт
             'font'=>[
                 'bold' => true,
                 'name' => 'Times New Roman',
                 'size' => 20
             ],
-            //выравнивание
             'alignment' => [
                 'horizontal' => PHPExcel_STYLE_ALIGNMENT::HORIZONTAL_CENTER,
                 'vertical' => PHPExcel_STYLE_ALIGNMENT::VERTICAL_CENTER,
             ],
-            //заполнение цветом
             'fill' => [
                 'type' => PHPExcel_STYLE_FILL::FILL_SOLID,
                 'color'=>['rgb' => 'CFCFCF']
@@ -60,55 +65,28 @@ class DownloadController extends Controller
         ];
         $activeSheet->getStyle('A2:D2')->applyFromArray($style_header);
 
+        $activeSheet->setCellValue('A4', 'Общее количество зарегистрированных пользователей')
+                    ->setCellValue('B4', (string)$name_count);
 
+        $activeSheet->setCellValue('A5', 'Общее количество городов')
+                    ->setCellValue('B5', (string)$city_count);
 
-        // Add some data, resembling some different data types
-        $activeSheet->setCellValue('A3', 'String')
-                    ->setCellValue('B3', 'UTF-8')
-                    ->setCellValue('C3', 'Создать MS Excel Книги из PHP скриптов');
+        $activeSheet->setCellValue('A6', 'Общее количество регионов')
+                    ->setCellValue('B6', (string)$region_count);
 
-        $activeSheet->setCellValue('A4', 'Number')
-                    ->setCellValue('B4', 'Integer')
-                    ->setCellValue('C4', '12');
-
-        $activeSheet->setCellValue('A5', 'Number')
-                    ->setCellValue('B5', 'Float')
-                    ->setCellValue('C5', '34.56');
-
-        $activeSheet->setCellValue('A6', 'Number')
-                    ->setCellValue('B6', 'Negative')
-                    ->setCellValue('C6', '-7.89');
-
-        $activeSheet->setCellValue('A7', 'Boolean')
-                    ->setCellValue('B7', 'True')
-                    ->setCellValue('C7', 'true');
-
-        $activeSheet->setCellValue('A8', 'Boolean')
-                    ->setCellValue('B8', 'False')
-                    ->setCellValue('C8', 'false');
-
-        $dateTimeNow = time();
-        //$activeSheet->setCellValue('A9', 'Date/Time')
-        //                            ->setCellValue('B9', 'Date')
-        //                            ->setCellValue('C9', PHPExcel_Shared_Date::PHPToExcel( $dateTimeNow ));
-        //$activeSheet->getStyle('C9')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2);
-
-        //$activeSheet->setCellValue('A10', 'Date/Time')
-        //                            ->setCellValue('B10', 'Time')
-        //                            ->setCellValue('C10', PHPExcel_Shared_Date::PHPToExcel( $dateTimeNow ));
-        //$activeSheet->getStyle('C10')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_TIME4);
-
-        //$activeSheet->setCellValue('A11', 'Date/Time')
-        //            ->setCellValue('B11', 'Date and Time')
-        //            ->setCellValue('C11', PHPExcel_Shared_Date::PHPToExcel( $dateTimeNow ));
-        //$activeSheet->getStyle('C11')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DATETIME);
-
+        $activeSheet->mergeCells('B8:D8');
+        $date = date("d.m.Y H:i:s");
+        $activeSheet->setCellValue('A8', 'Дата и время формирования отчёта');
+        $activeSheet->setCellValue('B8', $date);
+        $activeSheet->getStyle('B8')
+                    ->getNumberFormat()
+                    ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX14);
 
         $activeSheet->setTitle('Сводный отчёт');
         $objPHPExcel->setActiveSheetIndex(0);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="01simple.xlsx"');
+        header('Content-Disposition: attachment;filename="order_' . $date . '.xlsx"');
         header('Cache-Control: max-age=0');
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
