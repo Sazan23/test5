@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Utility\PHPExcel_Utils;
 use App\Models\Files;
 use App\Models\Records;
 use TCPDF;
@@ -18,7 +18,7 @@ class DownloadController extends Controller
      */
     public function downloadXLS(Request $request, $id)
     {
-        Records::formationXLS_Report($id);
+        PHPExcel_Utils::formationXLS_Report($id);
 
         return;
     }
