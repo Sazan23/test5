@@ -41,15 +41,15 @@
       <tbody>
         @foreach( $records as $record )
           <tr id="{{ $record->id }}">
-            <td>{{ $record->record_name }}</td>
-            <td>{{ $record->record_phone  }}</td>
-            <td>{{ $record->record_email }}</td>
-            <td>{{ date('d.m.Y', strtotime($record->record_date)) }}</td>
-            <td>{{ $record->record_company }}</td>
-            <td>{{ $record->record_city  }}</td>
-            <td>{{ $record->record_region }}</td>
-            <td>{{ $record->record_guid }}</td>
-            <td>
+            <td data-td="name">{{ $record->record_name }}</td>
+            <td data-td="phone">{{ $record->record_phone  }}</td>
+            <td data-td="email">{{ $record->record_email }}</td>
+            <td data-td="date">{{ date('d.m.Y', strtotime($record->record_date)) }}</td>
+            <td data-td="company">{{ $record->record_company }}</td>
+            <td data-td="city">{{ $record->record_city  }}</td>
+            <td data-td="region">{{ $record->record_region }}</td>
+            <td data-td="guid">{{ $record->record_guid }}</td>
+            <td data-td="technical">
               <button data-update="{{ $record->id }}" type="button" class="btn btn-primary btn-sm btn_update">Сохранить</button>
               <button data-pdf="{{ $record->id }}" type="button" class="btn btn-success btn-sm btn_pdf">PDF</button>
               <button data-delete="{{ $record->id }}" type="button" class="btn btn-danger btn-sm btn_delete">Удалить</button>
@@ -78,12 +78,11 @@
         $('button.btn.btn_pdf').hide();
 
         $(this).children().each(function(index, el) {
-          
-          if (index === 7) {
+          if ($(this).data('td') === 'guid') {
             return true;
           };
           
-          if (index === 8) {
+          if ($(this).data('td') === 'technical') {
             $(this).children('[data-update="'+id+'"]').show();
             return true;
           };
@@ -91,7 +90,7 @@
           editable_string[index] = $(this).html();
           $(this).html('');
 
-          if (index === 3) {
+          if ($(this).data('td') === 'date') {
             let datepicker = $(`<div class="input-group date" id="datepicker">
                                   <input type="text" class="form-control form-control-sm">
                                 </div>`);
@@ -118,7 +117,7 @@
         e.target.disabled = true;
         let id = $(event.target).data('update');
         $(`#${id}`).children().each(function(index, el) {
-          if (index === 7 || index === 8) {
+          if ($(this).data('td') === 'guid' || $(this).data('td') === 'technical') {
             return true;
           };
           editable_string[index] =  $(this).find('input').val();
