@@ -48,7 +48,8 @@
             <td>{{ $record->record_region }}</td>
             <td>{{ $record->record_guid }}</td>
             <td>
-              <button data-update="{{ $record->id }}" type="button" class="btn btn-primary btn-sm btn_update" disabled>Сохранить</button>
+              <button data-update="{{ $record->id }}" type="button" class="btn btn-primary btn-sm btn_update">Сохранить</button>
+              <button data-pdf="{{ $record->id }}" type="button" class="btn btn-success btn-sm btn_pdf">PDF</button>
               <button data-delete="{{ $record->id }}" type="button" class="btn btn-danger btn-sm btn_delete">Удалить</button>
             </td>
           </tr>
@@ -63,12 +64,17 @@
       $('#file_description').val('{{ $file->file_name }}');
       let editable_string = [];
       let block = false;
+      $('button.btn.btn_update').hide();
 
       $('tr').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         if (block) return;
         block = true;
+        let id = $(this).prop('id');
+        $('button.btn.btn_delete').hide();
+        $('button.btn.btn_pdf').hide();
+
         $(this).children().each(function(index, el) {
           
           if (index === 7) {
@@ -76,7 +82,7 @@
           };
           
           if (index === 8) {
-            $(this).children().removeAttr('disabled');
+            $(this).children('[data-update="'+id+'"]').show();
             return true;
           };
 
@@ -108,7 +114,6 @@
         e.preventDefault();
         e.stopPropagation();
         e.target.disabled = true;
-        block = false;
         let id = $(event.target).data('update');
         $(`#${id}`).children().each(function(index, el) {
           if (index === 7 || index === 8) {
@@ -140,7 +145,8 @@
           url: "{{ route('itemSave') }}",
           data: data,
           success: successItemUpdate,
-          error: ajaxError
+          error: ajaxError,
+          complete: completeAction
         })
       });
 
@@ -149,6 +155,7 @@
         e.stopPropagation();
 
         if (confirm("Вы действительно хотите удалить эту запись?")) {
+          block = true;
           e.target.disabled = true;
           let data = {
             _token: "{{ csrf_token() }}",
@@ -159,22 +166,39 @@
             url: "{{ route('itemDelete') }}",
             data: data,
             success: successItemDelete,
-            error: ajaxError
+            error: ajaxError,
+            complete: completeAction
           })
         }
       });
 
       $('button.btn.btn_download').on('click', function(e) {
-        window.open('/download/{{ $file->id }}', '_blank');
+        window.open('/download/xls/{{ $file->id }}', '_blank');
+      });
+
+      $('button.btn.btn_pdf').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let id = $(event.target).data('pdf')
+        let file_id = "{!! $file->id !!}";
+        window.open(`/download/pdf/${file_id}/${id}`, '_blank');
       });
 
       function successItemUpdate(data) {
         alert(data.success);
+        block = false;
       }
 
       function successItemDelete(data) {
         $(`#${data.id}`).remove();
         alert(data.success);
+        block = false;
+      }
+
+      function completeAction() {
+        $('button.btn.btn_update').hide();
+        $('button.btn.btn_delete').show();
+        $('button.btn.btn_pdf').show();
       }
 
     });

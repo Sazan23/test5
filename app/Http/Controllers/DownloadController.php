@@ -3,14 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 use App\Models\Files;
 use App\Models\Records;
-use PHPExcel;
-use PHPExcel_IOFactory;
-use PHPExcel_STYLE_ALIGNMENT;
-use PHPExcel_STYLE_FILL;
-use PHPExcel_Style_NumberFormat;
+use TCPDF;
 
 class DownloadController extends Controller
 {
@@ -20,78 +16,86 @@ class DownloadController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return void
      */
-    public function download(Request $request, $id)
+    public function downloadXLS(Request $request, $id)
     {
-        $file = Files::find($id);
-        $records = Records::where('file_id', $id)->get();
-        $name_count = DB::table('records')->where('file_id', $id)->count('record_name');
-        $city_count = DB::table('records')->where('file_id', $id)->count('record_city');
-        $region_count = DB::table('records')->where('file_id', $id)->count('record_region');
+        Records::formationXLS_Report($id);
 
-        $objPHPExcel = new PHPExcel();
+        return;
+    }
 
-        $objPHPExcel->getProperties()->setCreator("Oleg Denisenko")
-                    ->setLastModifiedBy("Oleg Denisenko")
-                    ->setTitle("Office 2007 XLSX Test Document")
-                    ->setSubject("Office 2007 XLSX Test Document")
-                    ->setDescription("Test document for Office 2007 XLSX")
-                    ->setKeywords("office 2007 openxml php")
-                    ->setCategory("Test result file");
+    /**
+     * Download record report
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function downloadPDF_record(Request $request, $file_id, $id )
+    {
+        $file = Files::find($file_id);
+        $record = Records::where('file_id', $file_id)
+                         ->where('id', $id)
+                         ->first();
+        // create new PDF document
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8');
 
-        $objPHPExcel->setActiveSheetIndex(0);
-        $activeSheet = $objPHPExcel->getActiveSheet();
+        // set document information
+        $pdf->setCreator(PDF_CREATOR);
+        $pdf->setAuthor('Oleg Denisenko');
+        $pdf->setTitle('TCPDF Example 009');
+        $pdf->setSubject('TCPDF Tutorial');
+        $pdf->setKeywords('TCPDF, PDF, example, test, guide');
 
-        $activeSheet->getColumnDimension('A')->setWidth(80);
-        $activeSheet->getColumnDimension('B')->setWidth(10);
-        $activeSheet->getColumnDimension('C')->setWidth(10);
-        $activeSheet->getColumnDimension('D')->setWidth(10);
+        // set default header data
+        $pdf_header_string= "Отчёт по записи №". $id. "\nиз файла " . $file->file_name;
+        $pdf->setHeaderData('logo.jpg', 20, PDF_HEADER_TITLE, $pdf_header_string);
 
-        $activeSheet->mergeCells('A2:D2');
-        $activeSheet->setCellValue('A2', 'Сводный отчёт по загруженному файлу ' . $file->file_name);
-        $style_header = [
-            'font'=>[
-                'bold' => true,
-                'name' => 'Times New Roman',
-                'size' => 20
-            ],
-            'alignment' => [
-                'horizontal' => PHPExcel_STYLE_ALIGNMENT::HORIZONTAL_CENTER,
-                'vertical' => PHPExcel_STYLE_ALIGNMENT::VERTICAL_CENTER,
-            ],
-            'fill' => [
-                'type' => PHPExcel_STYLE_FILL::FILL_SOLID,
-                'color'=>['rgb' => 'CFCFCF']
-            ],
-        ];
-        $activeSheet->getStyle('A2:D2')->applyFromArray($style_header);
+        // set header and footer fonts
+        $pdf->setHeaderFont(['dejavusans', '', PDF_FONT_SIZE_MAIN]);
+        $pdf->setFooterFont(['dejavusans', '', PDF_FONT_SIZE_DATA]);
 
-        $activeSheet->setCellValue('A4', 'Общее количество зарегистрированных пользователей')
-                    ->setCellValue('B4', (string)$name_count);
+        // set default monospaced font
+        $pdf->setDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-        $activeSheet->setCellValue('A5', 'Общее количество городов')
-                    ->setCellValue('B5', (string)$city_count);
+        // set margins
+        $pdf->setMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->setHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->setFooterMargin(PDF_MARGIN_FOOTER);
 
-        $activeSheet->setCellValue('A6', 'Общее количество регионов')
-                    ->setCellValue('B6', (string)$region_count);
+        // -------------------------------------------------------------------
+        $pdf->SetFont('dejavusans', '', 14, '', true);
+        // add a page
+        $pdf->AddPage();
+        $col = 30;
+        $line = 10;
 
-        $activeSheet->mergeCells('B8:D8');
-        $date = date("d.m.Y H:i:s");
-        $activeSheet->setCellValue('A8', 'Дата и время формирования отчёта');
-        $activeSheet->setCellValue('B8', $date);
-        $activeSheet->getStyle('B8')
-                    ->getNumberFormat()
-                    ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX14);
+        $pdf->Cell( '', 30, $file->file_name, 0, 0, 'C' );
+        $pdf->Ln();
+        $pdf->Cell( $col, $line, 'ФИО', 0, 0, 'L' );
+        $pdf->Cell( '', $line, $record->record_name, 1, 0, 'L' );
+        $pdf->Ln();
+        $pdf->Cell( $col, $line, 'телефон', 0, 0, 'L' );
+        $pdf->Cell( '', $line, $record->record_phone, 1, 0, 'L' );
+        $pdf->Ln();
+        $pdf->Cell( $col, $line, 'Email', 0, 0, 'L' );
+        $pdf->Cell( '', $line, $record->record_email, 1, 0, 'L' );
+        $pdf->Ln();
+        $pdf->Cell( $col, $line, 'Company', 0, 0, 'L' );
+        $pdf->Cell( '', $line, $record->record_company, 1, 0, 'L' );
+        $pdf->Ln();
+        $pdf->Cell( $col, $line, 'City', 0, 0, 'L' );
+        $pdf->Cell( '', $line, $record->record_city, 1, 0, 'L' );
+        $pdf->Ln();
+        $pdf->Cell( $col, $line, 'Region', 0, 0, 'L' );
+        $pdf->Cell( '', $line, $record->record_region, 1, 0, 'L' );
+        $pdf->Ln();
+        $pdf->Cell( $col, $line, 'GUID', 0, 0, 'L' );
+        $pdf->Cell( '', $line, $record->record_guid, 1, 0, 'L' );
+        $pdf->Ln();
 
-        $activeSheet->setTitle('Сводный отчёт');
-        $objPHPExcel->setActiveSheetIndex(0);
+        // -------------------------------------------------------------------
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="order_' . $date . '.xlsx"');
-        header('Cache-Control: max-age=0');
-
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
-
+        //Close and output PDF document
+        $pdf->Output('example_xxx.pdf', 'I');
         return;
     }
 }

@@ -23,7 +23,8 @@ Route::get('/', function () {
 
 Route::get('/list', [MainController::class, 'list'])->name('list');
 Route::get('/list/{id}', [MainController::class, 'records']);
-Route::get('/download/{id}', [DownloadController::class, 'download']);
+Route::get('/download/xls/{id}', [DownloadController::class, 'downloadXLS']);
+Route::get('/download/pdf/{file_id}/{id}', [DownloadController::class, 'downloadPDF_record']);
 Route::post('/upload', [UploadController::class, 'upload']);
 Route::post('/update', [AjaxController::class, 'updateItem'])->name('itemSave');
 Route::post('/delete', [AjaxController::class, 'deleteItem'])->name('itemDelete');
