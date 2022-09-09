@@ -5,6 +5,11 @@
 @endsection
 
 @section('content')
+  <input id="file_id_val" type="hidden" value="{{ $file->id }}">
+  <input id="file_name_val" type="hidden" value="{{ $file->file_name }}">
+  <input id="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  <input id="url_update" type="hidden" value="{{ route('itemSave') }}">
+  <input id="url_delete" type="hidden" value="{{ route('itemDelete') }}">
   <div class="p-3 pb-md-4 mx-auto text-center">
     <h1 class="display-4 fw-normal">Записи</h1>
   </div>
@@ -57,10 +62,10 @@
 
   <script>
     $( document ).ready(function() {
-      $('#file_name').val('{{ $file->file_name }}');
-      $('#file_description').val('{{ $file->file_name }}');
+      $('#file_name').val($('#file_name_val').val());
       let editable_string = [];
       let block = false;
+      let file_id = $('#file_id_val').val();
       $('button.btn.btn_update').hide();
 
       $('tr').on('click', function(e) {
@@ -135,11 +140,11 @@
         editable_string.forEach(function(item, i) {
           data[map[i]] = item;
         });
-        data._token = "{{ csrf_token() }}";
+        data._token = $('#csrf_token').val();
         data.record_id = id;
 
         $.ajax({
-          url: "{{ route('itemSave') }}",
+          url: $('#url_update').val(),
           data: data,
           success: successItemUpdate,
           error: ajaxError,
@@ -155,12 +160,12 @@
           block = true;
           e.target.disabled = true;
           let data = {
-            _token: "{{ csrf_token() }}",
+            _token: $('#csrf_token').val(),
             record_id: $(event.target).data('delete')
           };
 
           $.ajax({
-            url: "{{ route('itemDelete') }}",
+            url: $('#url_delete').val(),
             data: data,
             success: successItemDelete,
             error: ajaxError,
@@ -170,18 +175,17 @@
       });
 
       $('button.btn.btn_download_xls').on('click', function(e) {
-        window.open('/download/xls/{{ $file->id }}', '_blank');
+        window.open(`/download/xls/${file_id}`, '_blank');
       });
 
       $('button.btn.btn_download_pdf').on('click', function(e) {
-        window.open('/download/pdf/full/{{ $file->id }}', '_blank');
+        window.open(`/download/pdf/full/${file_id}`, '_blank');
       });
 
       $('button.btn.btn_pdf').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         let id = $(event.target).data('pdf')
-        let file_id = "{!! $file->id !!}";
         window.open(`/download/pdf/single/${file_id}/${id}`, '_blank');
       });
 

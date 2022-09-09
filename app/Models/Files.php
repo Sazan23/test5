@@ -10,9 +10,9 @@ class Files extends Model
 {
     use HasFactory;
 
-   /**
-   * Получить все записи файла.
-   */
+    /**
+     * Get all records of a file.
+     */
     public function records()
     {
         return $this->hasMany(Records::class, 'file_id');
