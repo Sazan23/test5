@@ -36,9 +36,18 @@ class TCPDF_Outer extends TCPDF
                          ->where('id', $id)
                          ->first();
         $this->sheetСontentGeneration($file, $record);
-        $this->generatePDF('singleRecordReport_' . $id . '.pdf' );
+        $this->generatePDF('singleRecordReport_' . $id . '.pdf');
     }
-    
+
+    public function fullRecordReport($file_id) {
+        $file = Files::find($file_id);
+        $records = Files::find($file_id)->records;
+        foreach ($records as $record) {
+            $this->sheetСontentGeneration($file, $record);
+        }
+        $this->generatePDF('fullRecordReport.pdf');
+    }
+
     private function sheetСontentGeneration($file, $record) {
         $col = 30;
         $line = 10;        

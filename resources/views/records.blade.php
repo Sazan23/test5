@@ -173,12 +173,16 @@
         window.open('/download/xls/{{ $file->id }}', '_blank');
       });
 
+      $('button.btn.btn_download_pdf').on('click', function(e) {
+        window.open('/download/pdf/full/{{ $file->id }}', '_blank');
+      });
+
       $('button.btn.btn_pdf').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         let id = $(event.target).data('pdf')
         let file_id = "{!! $file->id !!}";
-        window.open(`/download/pdf/${file_id}/${id}`, '_blank');
+        window.open(`/download/pdf/single/${file_id}/${id}`, '_blank');
       });
 
       function successItemUpdate(data) {

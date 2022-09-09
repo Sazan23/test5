@@ -17,12 +17,10 @@ class DownloadController extends Controller
     public function downloadXLS(Request $request, $id)
     {
         PHPExcel_Utils::formationXLS_Report($id);
-
-        return;
     }
 
     /**
-     * Download record report
+     * Download single record report
      *
      * @param  \Illuminate\Http\Request $request
      * @return void
@@ -31,6 +29,17 @@ class DownloadController extends Controller
     {
         $pdf = new TCPDF_Outer(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8');
         $pdf->singleRecordReport($file_id, $id);
-        return;
+    }
+
+    /**
+     * Download full record report
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function downloadPDF_fullReport(Request $request, $file_id)
+    {
+        $pdf = new TCPDF_Outer(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8');
+        $pdf->fullRecordReport($file_id);
     }
 }
