@@ -15,13 +15,10 @@
         <input type="text" class="form-control" id="file_name">
       </div>
     </fieldset>
-    <div class="mb-3">
-      <label for="file_description" class="form-label">Описание</label>
-      <input type="text" class="form-control" id="file_description">
-    </div>
-    <button type="button" class="btn btn-primary btn_download">Сформировать сводный отчёт</button>
+    <button type="button" class="btn btn-primary btn_download_xls">Сформировать сводный отчёт Excel</button>
+    <button type="button" class="btn btn-success btn_download_pdf">Сформировать сводный отчёт PDF</button>
   </form>
-  <div class="card" style="width: 1900px;">
+  <div class="container-fluid py-3">
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -172,7 +169,7 @@
         }
       });
 
-      $('button.btn.btn_download').on('click', function(e) {
+      $('button.btn.btn_download_xls').on('click', function(e) {
         window.open('/download/xls/{{ $file->id }}', '_blank');
       });
 
