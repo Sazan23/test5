@@ -23,8 +23,8 @@ class PHPExcel_Utils
         $file = Files::find($id);
         
         $name_count = DB::table('records')->where('file_id', $id)->count('record_name');
-        $city_count = DB::table('records')->where('file_id', $id)->distinct('record_city')->count('record_city');
-        $region_count = DB::table('records')->where('file_id', $id)->distinct('record_region')->count('record_region');
+        $city_count = DB::table('records')->where('file_id', $id, '<>', '')->distinct('record_city')->count('record_city');
+        $region_count = DB::table('records')->where('file_id', $id, '<>', '')->distinct('record_region')->count('record_region');
 
         $objPHPExcel = new PHPExcel();
 
