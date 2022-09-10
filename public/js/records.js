@@ -102,9 +102,9 @@ $( document ).ready(function() {
 
   function updateRecord(e) {
     let id = $(e.target).data('update');
-    let data = dataRequestPreparation(id);
     lineToReadMode(id);
-
+    let data = dataRequestPreparation(id);
+    
     $.ajax({
       url: $('#url_update').val(),
       data: data,
