@@ -24,8 +24,8 @@ Route::get('/', function () {
 Route::get('/list', [MainController::class, 'list'])->name('list');
 Route::get('/list/{file_id}', [MainController::class, 'records']);
 Route::get('/download/xls/{id}', [DownloadController::class, 'downloadXLS']);
-Route::get('/download/pdf/full/{file_id}', [DownloadController::class, 'downloadPDF_fullReport']);
-Route::get('/download/pdf/single/{file_id}/{id}', [DownloadController::class, 'downloadPDF_record']);
+Route::get('/download/pdf/full/{file_id}', [DownloadController::class, 'downloadPDF_fullReport'])->middleware('tcpdf');
+Route::get('/download/pdf/single/{file_id}/{id}', [DownloadController::class, 'downloadPDF_record'])->middleware('tcpdf');
 Route::post('/upload', [UploadController::class, 'upload']);
 Route::post('/update', [AjaxController::class, 'updateItem'])->name('itemSave');
 Route::post('/delete', [AjaxController::class, 'deleteItem'])->name('itemDelete');
