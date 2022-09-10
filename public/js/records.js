@@ -5,7 +5,7 @@ $( document ).ready(function() {
   let file_id = $('#file_id_val').val();
   $('button.btn.btn_update').hide();
 
-  $('tr').on('click', function(e) {
+  $('tbody tr').on('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
     if (block) return;
@@ -104,7 +104,7 @@ $( document ).ready(function() {
     let id = $(e.target).data('update');
     lineToReadMode(id);
     let data = dataRequestPreparation(id);
-    
+
     $.ajax({
       url: $('#url_update').val(),
       data: data,
