@@ -22,13 +22,14 @@ class MainController extends Controller
     
     /**
      * Show form for uploading and displaying Excel files.
-     *
+     * 
+     * @param  int  $file_id
      * @return \Illuminate\Http\Response
      */
-    public function records(Request $request, $id)
+    public function records($file_id)
     {
-        $file = Files::where(['id'=>$id])->get();;
-        $records = Records::where('file_id', $id)->get();
+        $file = Files::where(['id'=>$file_id])->get();
+        $records = Records::where('file_id', $file_id)->get();
         return view('records', ['records'=>$records, 'file'=>$file[0]] );
     }
 }

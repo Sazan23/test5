@@ -10,7 +10,8 @@ class AjaxController extends Controller
     /**
      * Saving an edited entry.
      *
-     * @return void
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function updateItem(Request $request)
     {
@@ -31,7 +32,8 @@ class AjaxController extends Controller
     /**
      * Deleting one entry.
      *
-     * @return void
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
     public function deleteItem(Request $request)
     {

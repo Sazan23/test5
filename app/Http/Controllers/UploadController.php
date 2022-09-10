@@ -11,7 +11,7 @@ use PHPExcel_IOFactory;
 class UploadController extends Controller
 {
     /**
-     * 
+     * Upload file to server
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
