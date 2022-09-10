@@ -8,8 +8,15 @@ use TCPDF;
 
 class TCPDF_Outer extends TCPDF
 {
-    public function __construct( $orientation, $unit, $format ) {
-        parent::__construct( $orientation, $unit, $format, true, 'UTF-8', false );
+    /**
+     * Setting default settings
+     * 
+     * @param string $orientation Page orientation
+     * @param string $unit        PDF unit format
+     * @param string $format      Page format
+     */
+    public function __construct($orientation, $unit, $format) {
+        parent::__construct($orientation, $unit, $format, true, 'UTF-8', false);
 
         $this->setCreator(PDF_CREATOR);
         $this->setAuthor('Oleg Denisenko');
@@ -30,6 +37,13 @@ class TCPDF_Outer extends TCPDF
         $this->setFooterMargin(PDF_MARGIN_FOOTER);
     }
 
+    /**
+     * Single record report
+     * 
+     * @param string $file_id
+     * @param string $id
+     * @return void
+     */
     public function singleRecordReport($file_id, $id) {
         $file = Files::find($file_id);
         $record = Records::where('file_id', $file_id)
@@ -39,6 +53,12 @@ class TCPDF_Outer extends TCPDF
         $this->generatePDF('singleRecordReport_' . $id . '.pdf');
     }
 
+    /**
+     * Full record report
+     * 
+     * @param string $file_id
+     * @return void
+     */
     public function fullRecordReport($file_id) {
         $file = Files::find($file_id);
         $records = Files::find($file_id)->records;
@@ -48,6 +68,13 @@ class TCPDF_Outer extends TCPDF
         $this->generatePDF('fullRecordReport.pdf');
     }
 
+    /**
+     * Page content generation
+     * 
+     * @param App\Models\Files   $file
+     * @param App\Models\Records $record
+     * @return void
+     */
     private function sheetСontentGeneration($file, $record) {
         $col = 30;
         $line = 10;        
@@ -78,7 +105,14 @@ class TCPDF_Outer extends TCPDF
         $this->Ln();
     }
     
-    private function generatePDF(string $file_name) {
+    
+    /**
+     * Output PDF-file
+     * 
+     * @param string $file_name
+     * @return void
+     */
+    private function generatePDF($file_name) {
         $this->Output($file_name, 'I');
         return;
     }

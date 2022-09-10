@@ -12,6 +12,12 @@ use PHPExcel_Style_NumberFormat;
 
 class PHPExcel_Utils
 {
+    /**
+     * Excel summary report generation
+     * 
+     * @param  string  $id
+     * @return void
+     */
     public static function formationXLS_Report($id) {
 
         $file = Files::find($id);

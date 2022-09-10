@@ -23,7 +23,7 @@ class MainController extends Controller
     /**
      * Show form for uploading and displaying Excel files.
      * 
-     * @param  int  $file_id
+     * @param  string  $file_id
      * @return \Illuminate\Http\Response
      */
     public function records($file_id)

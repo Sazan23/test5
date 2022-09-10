@@ -11,7 +11,7 @@ class DownloadController extends Controller
     /**
      * Download summary report
      *
-     * @param  int  $id
+     * @param  string  $id
      * @return void
      */
     public function downloadXLS($id)
@@ -22,8 +22,8 @@ class DownloadController extends Controller
     /**
      * Download single record report
      *
-     * @param  int  $file_id
-     * @param  int  $id
+     * @param  string  $file_id
+     * @param  string  $id
      * @return void
      */
     public function downloadPDF_record($file_id, $id)
@@ -35,7 +35,7 @@ class DownloadController extends Controller
     /**
      * Download full record report
      *
-     * @param  int  $file_id
+     * @param  string  $file_id
      * @return void
      */
     public function downloadPDF_fullReport($file_id)
