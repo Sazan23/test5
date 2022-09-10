@@ -10,7 +10,7 @@ class MainController extends Controller
 {
     
     /**
-     * Show form for uploading and displaying Excel files.
+     * Show Excel file list form
      *
      * @return \Illuminate\Http\Response
      */
@@ -21,7 +21,7 @@ class MainController extends Controller
     }
     
     /**
-     * Show form for uploading and displaying Excel files.
+     * Show form with records of single uploaded Excel file
      * 
      * @param  string  $file_id
      * @return \Illuminate\Http\Response

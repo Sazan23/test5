@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Utility\PHPExcel_Utils;
 use App\Utility\TCPDF_Outer;
 
