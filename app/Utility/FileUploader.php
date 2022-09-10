@@ -53,14 +53,7 @@ class FileUploader
         foreach($lists as $list) {
             foreach ($list as $key => $row) {
                 if ($key === 0) continue;
-                if (   $row[0] === null
-                    && $row[1] === null
-                    && $row[2] === null
-                    && $row[3] === null
-                    && $row[4] === null
-                    && $row[5] === null
-                    && $row[6] === null
-                    && $row[7] === null ) continue;
+                if ( $this->isEmptyRow($row) ) continue;
                 $record = new Records();
                 $record->file_id = $file_id;
                 $record->record_name = $row[0];
@@ -74,5 +67,20 @@ class FileUploader
                 $record->save();
             }
         }
+    }
+
+    /**
+     * Checks if the given row is not empty
+     * 
+     * @param  array  $row
+     * @return boolean
+     */
+    private function isEmptyRow($row) {
+        $res = true;
+        for ($i = 0; $i <= 7; $i++) {
+           if ($row[$i] !== null) $res = false;
+        }
+
+        return $res;
     }
 }
