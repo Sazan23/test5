@@ -13,6 +13,7 @@ $( document ).ready(function() {
     block = true;
     $('button.btn.btn_delete').hide();
     $('button.btn.btn_pdf').hide();
+    $('button.btn.btn_upload').hide();
     lineToWriteMode($(this));
   });
 
@@ -33,6 +34,31 @@ $( document ).ready(function() {
     e.preventDefault();
     e.stopPropagation();
     deleteRecord(e);
+  });
+
+  $('button.btn.btn_upload').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('#img_id').val($(e.target).data('upload'));
+  });
+
+  $('#p_file').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var formData = new FormData();
+    formData.append( 'p_file', $('#formFile')[0].files[0] );
+    formData.append( 'p_id', $('#img_id').val() );
+    
+    $.ajax({
+      url: $('#url_upload').val(),
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: formData,
+      success: successUploadImg,
+      error: ajaxError,
+      complete: completeAction
+    });
   });
 
   $('button.btn.btn_download_xls').on('click', function(e) {
@@ -72,7 +98,7 @@ $( document ).ready(function() {
 
   function lineToReadMode(id, el) {
     $(`#${id}`).children().each(function (index) {
-      if ($(this).data('td') === 'guid' || $(this).data('td') === 'technical') {
+      if ($(this).data('td') === 'guid' || $(this).data('td') === 'technical' || $(this).data('td') === 'img') {
         return true;
       };
       if (el.hasClass("btn_update")) {
@@ -86,7 +112,7 @@ $( document ).ready(function() {
   function lineToWriteMode(element) {
     let id = element.prop('id');
     element.children().each(function (index) {
-      if ($(this).data('td') === 'guid') {
+      if ($(this).data('td') === 'guid' || $(this).data('td') === 'img') {
         return true;
       };
 
@@ -161,9 +187,20 @@ $( document ).ready(function() {
     block = false;
   }
 
+  function successUploadImg(data) {
+    uploadModal.hide();
+    alert(data.url);
+    let cell = $(`tr#${data.id} > td[data-td="img"]`);
+    cell.empty();
+    let elem_img = $(`<img src="${data.url}" class="img-fluid" width="30" height="30" alt="">`);
+    cell.append(elem_img);
+    block = false;
+  }
+
   function completeAction() {
     $('button.btn.btn_update').hide();
     $('button.btn.btn_cancel').hide();
+    $('button.btn.btn_upload').show();
     $('button.btn.btn_delete').show();
     $('button.btn.btn_pdf').show();
   }
@@ -182,5 +219,9 @@ $( document ).ready(function() {
     });
   }
 });
+
+let uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'), {
+  keyboard: false
+})
 
 

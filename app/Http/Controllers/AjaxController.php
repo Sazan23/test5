@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Records;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AjaxController extends Controller
 {
@@ -41,5 +43,40 @@ class AjaxController extends Controller
         Records::where('id', $input['record_id'])->delete();
 
         return response()->json(['success'=>'Запись удалена','id'=>$input['record_id']]);
+    }
+
+    /**
+     * Deleting one entry.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function uploadImg(Request $request)
+    {
+        $resp = [];
+        $validator = Validator::make($request->all(), [
+            'p_file' => 'required|mimes:jpg,jpeg|max:4096'
+        ]);
+
+        if ($validator->fails()) {
+            $resp["success"] = false;
+            $resp["error"] = $validator->errors()->first('p_file');
+        } else {
+            $file = $request->file('p_file');
+            $upload_folder = 'public' . DIRECTORY_SEPARATOR .'img';
+            $id = $request->p_id;
+            $filename = $id . '_' . $file->getClientOriginalName();
+            Storage::putFileAs($upload_folder, $file, $filename);
+            $record = Records::find($id);
+            $record->record_img = $filename;
+            $record->save();
+            $resp["success"] = true;
+           // $resp["url"] = Storage::url('public/img/' . $filename);
+            $resp["url"] = url('/storage/img/'. $filename);
+            $resp["id"] = $id;
+            $resp["message"] = "Файл загружен";
+        }
+
+        return response()->json($resp);
     }
 }

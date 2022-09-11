@@ -29,6 +29,7 @@ Route::get('/download/pdf/single/{file_id}/{id}', [DownloadController::class, 'd
 Route::post('/upload', [UploadController::class, 'upload']);
 Route::post('/update', [AjaxController::class, 'updateItem'])->name('itemSave');
 Route::post('/delete', [AjaxController::class, 'deleteItem'])->name('itemDelete');
+Route::post('/upload_img', [AjaxController::class, 'uploadImg'])->name('uploadImg');
 
 Route::get('/xdebug', function () {
     return view('xdebug');
