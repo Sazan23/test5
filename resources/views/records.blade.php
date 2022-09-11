@@ -51,6 +51,7 @@
             <td data-td="guid">{{ $record->record_guid }}</td>
             <td data-td="technical">
               <button data-update="{{ $record->id }}" type="button" class="btn btn-primary btn-sm btn_update">Сохранить</button>
+              <button data-cancel="{{ $record->id }}" type="button" class="btn btn-secondary btn-sm btn_cancel">Отменить</button>
               <button data-pdf="{{ $record->id }}" type="button" class="btn btn-success btn-sm btn_pdf">PDF</button>
               <button data-delete="{{ $record->id }}" type="button" class="btn btn-danger btn-sm btn_delete">Удалить</button>
             </td>

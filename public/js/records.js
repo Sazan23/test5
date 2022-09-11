@@ -4,6 +4,7 @@ $( document ).ready(function() {
   let block = false;
   let file_id = $('#file_id_val').val();
   $('button.btn.btn_update').hide();
+  $('button.btn.btn_cancel').hide();
 
   $('tbody tr').on('click', function(e) {
     e.preventDefault();
@@ -20,6 +21,12 @@ $( document ).ready(function() {
     e.stopPropagation();
     e.target.disabled = true;
     updateRecord(e);
+  });
+
+  $('button.btn.btn_cancel').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    cancelRecord(e);
   });
 
   $('button.btn.btn_delete').on('click', function(e) {
@@ -63,12 +70,14 @@ $( document ).ready(function() {
     return data;
   }
 
-  function lineToReadMode(id) {
+  function lineToReadMode(id, el) {
     $(`#${id}`).children().each(function (index) {
       if ($(this).data('td') === 'guid' || $(this).data('td') === 'technical') {
         return true;
       };
-      editable_string[index] = $(this).find('input').val();
+      if (el.hasClass("btn_update")) {
+        editable_string[index] = $(this).find('input').val();
+      }
       $(this).empty();
       $(this).html(editable_string[index]);
     });
@@ -83,6 +92,7 @@ $( document ).ready(function() {
 
       if ($(this).data('td') === 'technical') {
         $(this).children('[data-update="' + id + '"]').show();
+        $(this).children('[data-cancel="' + id + '"]').show();
         return true;
       };
 
@@ -102,7 +112,7 @@ $( document ).ready(function() {
 
   function updateRecord(e) {
     let id = $(e.target).data('update');
-    lineToReadMode(id);
+    lineToReadMode(id, $(e.target));
     let data = dataRequestPreparation(id);
 
     $.ajax({
@@ -112,6 +122,13 @@ $( document ).ready(function() {
       error: ajaxError,
       complete: completeAction
     });
+  }
+
+  function cancelRecord(e) {
+    let id = $(e.target).data('cancel');
+    lineToReadMode(id, $(e.target));
+    completeAction();
+    block = false;
   }
 
   function deleteRecord(e) {
@@ -146,6 +163,7 @@ $( document ).ready(function() {
 
   function completeAction() {
     $('button.btn.btn_update').hide();
+    $('button.btn.btn_cancel').hide();
     $('button.btn.btn_delete').show();
     $('button.btn.btn_pdf').show();
   }
