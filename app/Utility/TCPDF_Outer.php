@@ -82,7 +82,8 @@ class TCPDF_Outer extends TCPDF
         $this->SetFont('dejavusans', '', 14, '', true);
         $this->AddPage();
 
-        $this->Image(url('/storage/img/'.  $record->record_img), 150, 35, 30, 50, 'JPG', '', '', true, 150, '', false, false, 1, false, false, false);
+        $url = 'storage/img/' . $record->record_img;
+        $this->Image($url, 150, 35, 30, 50, 'JPG', '', '', true, 150, '', false, false, 1, false, false, false);
         $this->Ln();
         $this->Cell( '', 30, $file->file_name, 0, 0, 'C' );
         $this->Ln();

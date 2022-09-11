@@ -5,6 +5,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\AjaxController;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,10 +32,6 @@ Route::post('/update', [AjaxController::class, 'updateItem'])->name('itemSave');
 Route::post('/delete', [AjaxController::class, 'deleteItem'])->name('itemDelete');
 Route::post('/upload_img', [AjaxController::class, 'uploadImg'])->name('uploadImg');
 
-Route::get('/xdebug', function () {
-    return view('xdebug');
-});
-
-Route::get('/dp', function () {
-    return view('dp');
+Route::get('/linkstorage', function () {
+    Artisan::call('storage:link');
 });
