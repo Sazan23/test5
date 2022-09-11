@@ -35,7 +35,6 @@
           <th scope="col">Организация</th>
           <th scope="col">Город</th>
           <th scope="col">Регион</th>
-          <th scope="col">GUID</th>
           <th scope="col"></th>
           <th scope="col">изображение</th>
         </tr>
@@ -50,7 +49,6 @@
             <td data-td="company">{{ $record->record_company }}</td>
             <td data-td="city">{{ $record->record_city  }}</td>
             <td data-td="region">{{ $record->record_region }}</td>
-            <td data-td="guid">{{ $record->record_guid }}</td>
             <td data-td="technical">
               <button data-update="{{ $record->id }}" type="button" class="btn btn-primary btn-sm btn_update">Сохранить</button>
               <button data-cancel="{{ $record->id }}" type="button" class="btn btn-secondary btn-sm btn_cancel">Отменить</button>

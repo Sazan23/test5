@@ -100,9 +100,6 @@ class TCPDF_Outer extends TCPDF
         $this->Cell( $col, $line, 'Region', 0, 0, 'L' );
         $this->Cell( '', $line, $record->record_region, 1, 0, 'L' );
         $this->Ln();
-        $this->Cell( $col, $line, 'GUID', 0, 0, 'L' );
-        $this->Cell( '', $line, $record->record_guid, 1, 0, 'L' );
-        $this->Ln();
     }
     
     

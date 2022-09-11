@@ -29,7 +29,6 @@
           <th scope="col">company</th>
           <th scope="col">city</th>
           <th scope="col">region</th>
-          <th scope="col">guid</th>
         </tr>
       </thead>
       <tbody>
@@ -41,7 +40,6 @@
           <td>Mattis Integer PC</td>
           <td>Dublin</td>
           <td>Katsina</td>
-          <td>C8D2B133-7E74-9E7B-A596-62EEE4A8668A</td>
         </tr>
         <tr>
           <td>Maris Buck</td>
@@ -51,7 +49,6 @@
           <td>Et Rutrum Non Industries</td>
           <td>Ananindeua</td>
           <td>East Region</td>
-          <td>22A7B336-1232-EE19-7C1A-7ACF6B1D1946</td>
         </tr>
         <tr>
           <td>Rigel Murphy</td>
@@ -61,7 +58,6 @@
           <td>A Industries</td>
           <td>Darwin</td>
           <td>Niedersachsen</td>
-          <td>ED056243-31D4-45B2-2295-659ECC016D3E</td>
         </tr>
       </tbody>
     </table>

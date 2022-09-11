@@ -23,7 +23,7 @@ class CreateRecordsTable extends Migration
             $table->string('record_company')->nullable();
             $table->string('record_city')->nullable();
             $table->string('record_region')->nullable();
-            $table->string('record_guid')->nullable();
+            $table->string('record_img')->nullable();
             $table->timestamps();
         });
 

@@ -63,7 +63,6 @@ class FileUploader
                 $record->record_company = $row[4];
                 $record->record_city  = $row[5];
                 $record->record_region = $row[6];
-                $record->record_guid = $row[7];
                 $record->save();
             }
         }
@@ -77,7 +76,7 @@ class FileUploader
      */
     private function isEmptyRow($row) {
         $res = true;
-        for ($i = 0; $i <= 7; $i++) {
+        for ($i = 0; $i <= 6; $i++) {
            if ($row[$i] !== null) $res = false;
         }
 

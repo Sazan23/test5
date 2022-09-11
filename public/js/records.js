@@ -85,7 +85,6 @@ $( document ).ready(function() {
       4: 'record_company',
       5: 'record_city',
       6: 'record_region',
-      7: 'record_guid',
     };
     let data = {};
     editable_string.forEach(function (item, i) {
@@ -98,7 +97,7 @@ $( document ).ready(function() {
 
   function lineToReadMode(id, el) {
     $(`#${id}`).children().each(function (index) {
-      if ($(this).data('td') === 'guid' || $(this).data('td') === 'technical' || $(this).data('td') === 'img') {
+      if ($(this).data('td') === 'technical' || $(this).data('td') === 'img') {
         return true;
       };
       if (el.hasClass("btn_update")) {
@@ -112,7 +111,7 @@ $( document ).ready(function() {
   function lineToWriteMode(element) {
     let id = element.prop('id');
     element.children().each(function (index) {
-      if ($(this).data('td') === 'guid' || $(this).data('td') === 'img') {
+      if ($(this).data('td') === 'img') {
         return true;
       };
 
@@ -189,7 +188,7 @@ $( document ).ready(function() {
 
   function successUploadImg(data) {
     uploadModal.hide();
-    alert(data.url);
+    alert(data.message);
     let cell = $(`tr#${data.id} > td[data-td="img"]`);
     cell.empty();
     let elem_img = $(`<img src="${data.url}" class="img-fluid" width="30" height="30" alt="">`);
