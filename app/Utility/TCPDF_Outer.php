@@ -77,9 +77,13 @@ class TCPDF_Outer extends TCPDF
      */
     private function sheetСontentGeneration($file, $record) {
         $col = 30;
-        $line = 10;        
+        $line = 10;
+
         $this->SetFont('dejavusans', '', 14, '', true);
         $this->AddPage();
+
+        $this->Image(url('/storage/img/'.  $record->record_img), 150, 35, 30, 50, 'JPG', '', '', true, 150, '', false, false, 1, false, false, false);
+        $this->Ln();
         $this->Cell( '', 30, $file->file_name, 0, 0, 'C' );
         $this->Ln();
         $this->Cell( $col, $line, 'ФИО', 0, 0, 'L' );

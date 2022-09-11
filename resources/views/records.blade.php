@@ -36,7 +36,7 @@
           <th scope="col">Город</th>
           <th scope="col">Регион</th>
           <th scope="col"></th>
-          <th scope="col">изображение</th>
+          <th scope="col">Изображение</th>
         </tr>
       </thead>
       <tbody>
