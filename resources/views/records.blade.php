@@ -69,7 +69,6 @@
       </tbody>
     </table>
   </div>
-  <!-- Modal -->
   <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

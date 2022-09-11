@@ -46,7 +46,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * Deleting one entry.
+     * Upload image.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -71,7 +71,6 @@ class AjaxController extends Controller
             $record->record_img = $filename;
             $record->save();
             $resp["success"] = true;
-           // $resp["url"] = Storage::url('public/img/' . $filename);
             $resp["url"] = url('/storage/img/'. $filename);
             $resp["id"] = $id;
             $resp["message"] = "Файл загружен";
