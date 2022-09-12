@@ -76,6 +76,11 @@ $( document ).ready(function() {
     window.open(`/download/pdf/single/${file_id}/${id}`, '_blank');
   });
 
+  /**
+   * Prepare the saved string for sending
+   * @param {int} id - record id
+   * @return {Object} 
+   */
   function dataRequestPreparation(id) {
     let map = {
       0: 'record_name',
@@ -95,6 +100,12 @@ $( document ).ready(function() {
     return data;
   }
 
+  /**
+   * Line in read mode
+   * @param {int} id  - record id
+   * @param {Object} element - <tr> element of table row being processed
+   * @return {void}
+   */
   function lineToReadMode(id, el) {
     $(`#${id}`).children().each(function (index) {
       if ($(this).data('td') === 'technical' || $(this).data('td') === 'img') {
@@ -108,6 +119,11 @@ $( document ).ready(function() {
     });
   }
 
+  /**
+   * Line in edit mode
+   * @param {Object} element - <tr> element of table row being processed
+   * @return {void}
+   */
   function lineToWriteMode(element) {
     let id = element.prop('id');
     element.children().each(function (index) {
@@ -135,6 +151,11 @@ $( document ).ready(function() {
     });
   }
 
+  /**
+   * Apply changes
+   * @param {Event}  e - fired event
+   * @return {void}
+   */
   function updateRecord(e) {
     let id = $(e.target).data('update');
     lineToReadMode(id, $(e.target));
@@ -149,6 +170,11 @@ $( document ).ready(function() {
     });
   }
 
+  /**
+   * Cancel changes
+   * @param {Event}  e - fired event
+   * @return {void}
+   */
   function cancelRecord(e) {
     let id = $(e.target).data('cancel');
     lineToReadMode(id, $(e.target));
@@ -156,6 +182,11 @@ $( document ).ready(function() {
     block = false;
   }
 
+  /**
+   * Delete record
+   * @param {Event}  e - fired event
+   * @return {void}
+   */
   function deleteRecord(e) {
     if (confirm("Вы действительно хотите удалить эту запись?")) {
       block = true;
@@ -174,18 +205,29 @@ $( document ).ready(function() {
       });
     }
   }
-
+  /**
+   * Called when a record has been successfully updated.
+   * @param {Object} data  - Response data
+   */
   function successItemUpdate(data) {
     alert(data.success);
     block = false;
   }
 
+  /**
+   * Called when a record is successfully deleted.
+   * @param {Object} data  - Response data
+   */
   function successItemDelete(data) {
     $(`#${data.id}`).remove();
     alert(data.success);
     block = false;
   }
 
+  /**
+   * Called when the image has successfully loaded.
+   * @param {Object} data - Response data
+   */
   function successUploadImg(data) {
     uploadModal.hide();
     alert(data.message);
@@ -196,6 +238,9 @@ $( document ).ready(function() {
     block = false;
   }
 
+  /**
+   * Button states back to original
+   */
   function completeAction() {
     $('button.btn.btn_update').hide();
     $('button.btn.btn_cancel').hide();
@@ -204,6 +249,12 @@ $( document ).ready(function() {
     $('button.btn.btn_pdf').show();
   }
 
+  /**
+   * Add datepicker to table cell
+   * @param {Object}  element - <td> element that owns cell of processed row of the table
+   * @param {integer} index   - column index
+   * @return {void}
+   */
   function addDatepicker(element, index) {
     let datepicker = $(`<div class="input-group date" id="datepicker">
                           <input type="text" class="form-control form-control-sm">
